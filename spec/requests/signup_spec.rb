@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
+
 require 'rails_helper'
 require 'spec_helper'
 require 'swagger_helper'
@@ -11,25 +15,25 @@ describe 'Auth' do
       produces 'application/json'
       parameter name: :user, in: :body, schema: {
         type: :object,
-        required: [ 'user' ],
+        required: ['user'],
         properties: {
-          user: { 
+          user: {
             type: :object,
-            required: [ 'email', 'password', 'password_confirmation' ],
+            required: %w[email password password_confirmation],
             properties: {
               email: { type: :string },
               password: { type: :string },
               password_confirmation: { type: :string }
-            },
-          },
-        },
+            }
+          }
+        }
       }
 
-      let!(:persistedUser) { create(:user, email: "user@example.com", password: "password") }
-      let!(:unpersistedUser) { attributes_for(:user, email: "user2@example.com", password: "password") }
+      let!(:persistedUser) { create(:user, email: 'user@example.com', password: 'password') }
+      let!(:unpersistedUser) { attributes_for(:user, email: 'user2@example.com', password: 'password') }
 
       response '200', 'User signed in' do
-        let(:user) do 
+        let(:user) do
           {
             user: {
               email: unpersistedUser[:email],
@@ -39,15 +43,14 @@ describe 'Auth' do
           }
         end
 
-        examples({'application/json' => 
+        examples({ 'application/json' =>
           {
             id: 1,
-            email:"user@example.com",
-            created_at: "2020-03-17T10:33:20.638Z",
-            updated_at: "2020-03-17T10:33:20.638Z"
-          }
-        })
-        
+            email: 'user@example.com',
+            created_at: '2020-03-17T10:33:20.638Z',
+            updated_at: '2020-03-17T10:33:20.638Z'
+          } })
+
         before do |example|
           submit_request(example.metadata)
         end
@@ -55,14 +58,14 @@ describe 'Auth' do
         it 'returns 200' do
           expect(response.status).to eq 200
         end
-    
+
         it 'returns a new user' do
           expect(response).to match_response_schema('user')
         end
       end
-      
+
       response '400', 'Bad Request' do
-        let(:user) do 
+        let(:user) do
           {
             user: {
               email: persistedUser.email,
@@ -75,16 +78,17 @@ describe 'Auth' do
         before do |example|
           submit_request(example.metadata)
         end
-        
+
         it 'returns bad request status' do
           expect(response.status).to eq 400
         end
-    
+
         it 'returns validation errors' do
-          expect(JSON.parse(response.body)["errors"][0]["title"]).to eq('Bad Request')
+          expect(JSON.parse(response.body)['errors'][0]['title']).to eq('Bad Request')
         end
       end
-
     end
   end
 end
+
+# rubocop:enable Metrics/BlockLength

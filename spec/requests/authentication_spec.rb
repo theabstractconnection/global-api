@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
+
 require 'rails_helper'
 require 'spec_helper'
 require 'swagger_helper'
@@ -11,23 +15,23 @@ describe 'Auth' do
       produces 'application/json'
       parameter name: :user, in: :body, schema: {
         type: :object,
-        required: [ 'user' ],
+        required: ['user'],
         properties: {
-          user: { 
+          user: {
             type: :object,
-            required: [ 'email', 'password' ],
+            required: %w[email password],
             properties: {
-              email: { type: :string},
-              password: { type: :string}
-            },
-          },
-        },
+              email: { type: :string },
+              password: { type: :string }
+            }
+          }
+        }
       }
-      
-      let!(:persistedUser) { create(:user, email: "user@example.com", password: "password") }
+
+      let!(:persistedUser) { create(:user, email: 'user@example.com', password: 'password') }
 
       response '200', 'User logged in' do
-        let(:user) do 
+        let(:user) do
           {
             user: {
               email: persistedUser.email,
@@ -36,15 +40,14 @@ describe 'Auth' do
           }
         end
 
-        examples({'application/json' => 
+        examples({ 'application/json' =>
           {
             id: 1,
-            email:"user@example.com",
-            created_at: "2020-03-17T10:33:20.638Z",
-            updated_at: "2020-03-17T10:33:20.638Z"
-          }
-        })
-        
+            email: 'user@example.com',
+            created_at: '2020-03-17T10:33:20.638Z',
+            updated_at: '2020-03-17T10:33:20.638Z'
+          } })
+
         before do |example|
           submit_request(example.metadata)
         end
@@ -52,7 +55,7 @@ describe 'Auth' do
         it 'returns 200' do
           expect(response).to have_http_status(200)
         end
-        
+
         it 'returns a valid response' do |example|
           assert_response_matches_metadata(example.metadata)
         end
@@ -60,19 +63,17 @@ describe 'Auth' do
         it 'returns JTW token in authorization header' do
           expect(response.headers['Authorization']).to be_present
         end
-    
+
         it 'returns valid JWT token' do
           decoded_token = decoded_jwt_token_from_response(response)
           expect(decoded_token.first['sub']).to be_present
         end
       end
 
-
       response '401', 'Error: Unauthorized' do
-        let(:user) { { } }
+        let(:user) { {} }
         run_test!
       end
-
     end
   end
 
@@ -89,7 +90,8 @@ describe 'Auth' do
   end
 end
 
-
-def decoded_jwt_token_from_response response
-  return decoded = JWT.decode(response.headers['Authorization'].split('Bearer ')[1], ENV['DEVISE_JWT_SECRET_KEY'])
+def decoded_jwt_token_from_response(response)
+  JWT.decode(response.headers['Authorization'].split('Bearer ')[1], ENV['DEVISE_JWT_SECRET_KEY'])
 end
+
+# rubocop:enable Metrics/BlockLength
