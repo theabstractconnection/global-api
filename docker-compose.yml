@@ -1,0 +1,19 @@
+version: '3.6'
+
+services:
+  web:
+    build: .
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: rails s -p 3333 -e production
+    ports:
+      - 3333:3333
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres@db
+  db:
+    image: postgres:alpine
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
