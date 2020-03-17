@@ -31,6 +31,7 @@ gem 'devise'
 gem 'devise-jwt', '~> 0.5.9'
 gem 'dry-configurable', '0.9.0' # Lock to fix no method error
 
+gem 'rswag'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -40,6 +41,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'database_cleaner'
   gem "json-schema"
+  gem 'rubocop'
 end
 
 group :development do

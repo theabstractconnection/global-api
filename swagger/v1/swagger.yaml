@@ -1,0 +1,95 @@
+---
+swagger: '2.0'
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/v1/login":
+    post:
+      summary: login a user
+      tags:
+      - authentication
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: user
+        in: body
+        schema:
+          type: object
+          required:
+          - user
+          properties:
+            user:
+              type: object
+              required:
+              - email
+              - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User logged in
+          examples:
+            application/json:
+              id: 1
+              email: user@example.com
+              created_at: '2020-03-17T10:33:20.638Z'
+              updated_at: '2020-03-17T10:33:20.638Z'
+        '401':
+          description: 'Error: Unauthorized'
+  "/api/v1/logout":
+    delete:
+      summary: logout a user
+      tags:
+      - authentication
+      consumes:
+      - application/json
+      responses:
+        '204':
+          description: no content
+  "/api/v1/signup":
+    post:
+      summary: singup a user
+      tags:
+      - authentication
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: user
+        in: body
+        schema:
+          type: object
+          required:
+          - user
+          properties:
+            user:
+              type: object
+              required:
+              - email
+              - password
+              - password_confirmation
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+      responses:
+        '200':
+          description: User signed in
+          examples:
+            application/json:
+              id: 1
+              email: user@example.com
+              created_at: '2020-03-17T10:33:20.638Z'
+              updated_at: '2020-03-17T10:33:20.638Z'
+        '400':
+          description: Bad Request

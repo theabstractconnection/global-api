@@ -1,55 +1,94 @@
+require 'rails_helper'
 require 'spec_helper'
+require 'swagger_helper'
 
-# curl -i --header "Content-Type: application/json" -X POST -d '{"user":{"email":"admin@example.com","password":"12345678"}}' http://localhost:3000/api/v1/login
-describe 'POST /api/v1/login', type: :request do
-  let(:user) { FactoryBot.create(:random_user) }
-  let(:url) { '/api/v1/login' }
-  let(:params) do
-    {
-      user: {
-        email: user.email,
-        password: user.password
+describe 'Auth' do
+  # curl -i --header "Content-Type: application/json" -X POST -d '{"user":{"email":"admin@example.com","password":"12345678"}}' http://localhost:3000/api/v1/login
+  path '/api/v1/login' do
+    post 'login a user' do
+      tags 'authentication'
+      consumes 'application/json'
+      produces 'application/json'
+      parameter name: :user, in: :body, schema: {
+        type: :object,
+        required: [ 'user' ],
+        properties: {
+          user: { 
+            type: :object,
+            required: [ 'email', 'password' ],
+            properties: {
+              email: { type: :string},
+              password: { type: :string}
+            },
+          },
+        },
       }
-    }
-  end
+      
+      let!(:persistedUser) { create(:user, email: "user@example.com", password: "password") }
 
-  context 'when params are correct' do
-    before do
-      post url, params: params
-    end
+      response '200', 'User logged in' do
+        let(:user) do 
+          {
+            user: {
+              email: persistedUser.email,
+              password: persistedUser.password
+            }
+          }
+        end
 
-    it 'returns 200' do
-      expect(response).to have_http_status(200)
-    end
+        examples({'application/json' => 
+          {
+            id: 1,
+            email:"user@example.com",
+            created_at: "2020-03-17T10:33:20.638Z",
+            updated_at: "2020-03-17T10:33:20.638Z"
+          }
+        })
+        
+        before do |example|
+          submit_request(example.metadata)
+        end
 
-    it 'returns JTW token in authorization header' do
-      expect(response.headers['Authorization']).to be_present
-    end
+        it 'returns 200' do
+          expect(response).to have_http_status(200)
+        end
+        
+        it 'returns a valid response' do |example|
+          assert_response_matches_metadata(example.metadata)
+        end
 
-    it 'returns valid JWT token' do
-      decoded_token = decoded_jwt_token_from_response(response)
-      expect(decoded_token.first['sub']).to be_present
-    end
-  end
-
-  context 'when login params are incorrect' do
-    before { post url }
+        it 'returns JTW token in authorization header' do
+          expect(response.headers['Authorization']).to be_present
+        end
     
-    it 'returns unathorized status' do
-      expect(response.status).to eq 401
+        it 'returns valid JWT token' do
+          decoded_token = decoded_jwt_token_from_response(response)
+          expect(decoded_token.first['sub']).to be_present
+        end
+      end
+
+
+      response '401', 'Error: Unauthorized' do
+        let(:user) { { } }
+        run_test!
+      end
+
+    end
+  end
+
+  # curl -i --header "Content-Type: application/json" -X DELETE http://localhost:3000/api/v1/logout
+  path '/api/v1/logout' do
+    delete 'logout a user' do
+      tags 'authentication'
+      consumes 'application/json'
+
+      response '204', 'no content' do
+        run_test!
+      end
     end
   end
 end
 
-# curl -i --header "Content-Type: application/json" -X DELETE http://localhost:3000/api/v1/logout
-describe 'DELETE /api/v1/logout', type: :request do
-  let(:url) { '/api/v1/logout' }
-
-  it 'returns 204, no content' do
-    delete url
-    expect(response).to have_http_status(204)
-  end
-end
 
 def decoded_jwt_token_from_response response
   return decoded = JWT.decode(response.headers['Authorization'].split('Bearer ')[1], ENV['DEVISE_JWT_SECRET_KEY'])
