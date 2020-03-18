@@ -1,10 +1,10 @@
 # README  
 
 ## BUILD CONTAINERS
-`docker-compose build`  
+`make target=web build`  
 
 ## START SERVICES
-`make target=web build service`  
+`make target=web service`  
 
 ## SETUP DB
 `make target=web cmd="rails db:create && rails db:migrate"`  
