@@ -4,8 +4,7 @@
 `docker-compose build`  
 
 ## START SERVICES
-`docker-compose up`  
+`make target=web build service`  
 
 ## SETUP DB
-`docker-compose run web rake db:create RAILS_ENV=production`  
-`docker-compose run web rake db:migrate RAILS_ENV=production`  
+`make target=web cmd="rails db:create && rails db:migrate"`  
