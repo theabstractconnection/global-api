@@ -40,7 +40,7 @@ services:
     environment:
       RAILS_ENV: production
   db:
-    image: postgres:alpine
+    image: postgres:11-alpine
     # Map volumes form host to container
     volumes:
       - db-data:/var/lib/postgresql/data
