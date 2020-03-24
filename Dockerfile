@@ -11,6 +11,7 @@ COPY --from=base . .
 ARG HOST_UID=${HOST_UID:-4000}
 ARG HOST_USER=${HOST_USER:-nodummy}
 ARG PROJECT_NAME=${PROJECT_NAME}
+ARG PORT=${PORT:-3333}
 RUN [ "${HOST_USER}" == "root" ] || \
     (adduser -h /home/${HOST_USER} -D -u ${HOST_UID} ${HOST_USER} \
     && chown -R "${HOST_UID}:${HOST_UID}" /home/${HOST_USER})
@@ -28,3 +29,4 @@ RUN mkdir -p /home/${HOST_USER}/${PROJECT_NAME}
 WORKDIR /home/${HOST_USER}/${PROJECT_NAME}
 ADD Gemfile Gemfile.lock /home/${HOST_USER}/${PROJECT_NAME}/
 RUN bundle install
+EXPOSE ${PORT}

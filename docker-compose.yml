@@ -12,6 +12,8 @@ services:
     # These variables are passed into the container.
     environment:
       - UID=${HOST_UID:-4000}
+      - PORT=${PORT:-3333}
+      - RAILS_ENV=${RAILS_ENV:-production}
     # Run with user priviliges by default.
     user: ${HOST_USER:-nodummy}
     image: ${PROJECT_NAME}:${HOST_USER:-nodummy}
@@ -25,20 +27,18 @@ services:
         - HOST_UID=${HOST_UID:-4000}
         - HOST_USER=${HOST_USER:-nodummy}
         - PROJECT_NAME=${PROJECT_NAME}
+        - PORT=${PORT:-3333}
     # Map volumes form host to container
     volumes:
       - ${PWD:-.}:/home/${HOST_USER}/${PROJECT_NAME}/
     # Run container as a service. Replace with something useful.
-    command: ["rails", "s", "-p", "3333", "-e", "production"]
+    command: ["rails", "s", "-p", "${PORT:-3333}", "-e", "${RAILS_ENV:-production}"]
     # Espose ports to the HOST:OTHER_CONTAINERS
     ports:
-      - 3333:3333
+      - ${PORT:-3333}:${PORT:-3333}
     # Set container depenpencies
     depends_on:
       - db
-    # Set environment variables
-    environment:
-      RAILS_ENV: production
   db:
     image: postgres:11-alpine
     # These variables are passed into the container.
