@@ -3,7 +3,10 @@
 [![Generic badge](https://img.shields.io/badge/Website-UP-green.svg)](https://api.theabstractconnection.com)
 [![Generic badge](https://img.shields.io/badge/Build-PASSING-green.svg)]()
 [![Generic badge](https://img.shields.io/badge/Use&#32;@&#32;Your&#32;Own&#32;Risks-&#9762;&#9760;&#9762;-red.svg)](https://opensource.org/licenses/MIT)
-[![Generic badge](https://img.shields.io/badge/Ask&#32;Me-Anything-blue.svg)]()
+[![Generic badge](https://img.shields.io/badge/Ask&#32;Me-Anything-blue.svg)]()  
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/36f82991bec9ecf13c4f/maintainability)](https://codeclimate.com/github/theabstractconnection/global_api/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/36f82991bec9ecf13c4f/test_coverage)](https://codeclimate.com/github/theabstractconnection/global_api/test_coverage)
 
 
 
