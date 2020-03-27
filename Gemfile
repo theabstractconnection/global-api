@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
+gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -27,22 +27,22 @@ gem 'bootsnap', '>= 1.4.2', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
-gem 'dotenv-rails'
+gem 'dotenv-rails', '>= 2.7.5'
 
-gem 'devise'
+gem 'devise', '>= 4.7.1'
 gem 'devise-jwt', '~> 0.5.9'
 gem 'dry-configurable', '0.9.0' # Lock to fix no method error
 
-gem 'rswag'
+gem 'rswag', '>= 2.2.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'database_cleaner'
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '>= 5.1.1'
   gem 'faker'
   gem 'json-schema'
-  gem 'rspec-rails', '~> 3.6'
+  gem 'rspec-rails', '~> 3.9', '>= 3.9.1'
   gem 'rubocop'
 end
 
