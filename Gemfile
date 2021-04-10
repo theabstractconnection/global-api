@@ -43,7 +43,7 @@ group :development, :test do
   gem 'faker'
   gem 'json-schema'
   gem 'rspec-rails', '~> 3.9', '>= 3.9.1'
-  gem 'rubocop'
+  gem 'rubocop', '>= 0.80.1'
 end
 
 group :development do
