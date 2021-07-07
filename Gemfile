@@ -41,7 +41,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails', '>= 5.1.1'
   gem 'faker'
-  gem 'json-schema'
+  gem 'json-schema', '>= 2.8.1'
   gem 'rspec-rails', '~> 3.9', '>= 3.9.1'
   gem 'rubocop'
 end
